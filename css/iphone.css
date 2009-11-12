@@ -2,9 +2,34 @@
 	display:inline;
 	background:none;
 	border:none;
+	width:75px;
+	height:75px;
+	margin:2px;
+	padding:0;
+	float:left;
 }
 
-ul#thumbs{
+#thumbs li img{
+	margin:0;
+	padding:0;
+}
+
+#thumbs ul{
 	border:none;
-	background:none;
+	display:block;
+	margin:2px;
+	padding:0;
+}
+
+#thumbs .count{
+	clear:left;
+	width:320px;
+	text-align:center;
+	line-height:24px;
+	margin:0px;
+}
+
+#thumbs{
+	padding:2px 0;
+	background:#FFF;
 }
