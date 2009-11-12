@@ -42,8 +42,17 @@ p{
 	margin:5px 0;
 }
 
-/**/
+/*Single Image View*/
 #heroImage{
 	display:block;
 	margin:0 auto;
+}
+
+.bottomnav{
+	display:block;
+	position:relative;
+	width:auto;
+	height:40px;
+	background:-webkit-gradient(linear, left top, left bottom, from(#ccc), to(#999));
+	color:#FFF;
 }

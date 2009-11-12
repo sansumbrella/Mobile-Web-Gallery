@@ -1,32 +1,39 @@
 var gApp = {currentGallery:''};
 gApp.jqt = $.jQTouch({
     icon: 'kilo.png',
-    statusBar: 'black'
+    statusBar: 'black',
+	useAnimations: true
 });
 
 gApp.Gallery = {
 	title:'Gallery',
 	current:0,
 	photos:[],
-	next: function() {
-		this.current += 1;
-		if(this.current>=photos.length){
+	getNext: function() {
+		this.current = this.current+1;
+		if(this.current>=this.photos.length){
 			this.current=0;
 		}
+		console.log("getNext attempting to return " + this.current + ", " + this.photos[this.current]);
 		return this.photos[this.current];
 	},
-	previous: function() {
-		this.current -= 1;
+	getPrevious: function() {
+		this.current = this.current-1;
 		if(this.current<0){
-			this.current=photos.length-1 || 0;
+			this.current=this.photos.length-1 || 0;
 		}
+		console.log("getPrevious attempting to return " + this.current + ", " + this.photos[this.current]);
+		return this.photos[this.current];
+	},
+	getCurrent: function(){
 		return this.photos[this.current];
 	},
 	setCurrentFromURL: function(url){
 		for(i in this.photos)
 		{
 			if(this.photos[i].full.match(url)){
-				this.current = i;
+				this.current = Number(i);
+				console.log("Current set to " + i + ", " + url);
 				return;
 			}
 		}
@@ -38,6 +45,8 @@ $(document).ready( function(){
 	gApp.getUserGalleries();
 	//get user gallery list from database
 	$('#mosaic').bind('pageAnimationStart', gApp.displayMosaic);
+	$('#previous').bind('click', function(e){e.preventDefault(); gApp.previous(); } );
+	$('#next').bind('click', function(e){e.preventDefault(); gApp.next(); });
 });
 
 gApp.displayMosaic = function(m){
@@ -66,7 +75,9 @@ gApp.displayMosaic = function(m){
 
 gApp.displayImage = function(im){
 	$('#heroimage').attr('src',im);
+	$('#heroimage').attr('src',im);
 	gApp.currentGallery.setCurrentFromURL(im);
+	console.log("Sliding to image " + im);
 	gApp.jqt.goTo('#singleImage', 'slide');
 };
 
@@ -81,7 +92,14 @@ gApp.buildInitialGallery = function(){
 									desc:i.toString()
 									};
 	}
-	gApp.currentGallery = gApp.allPhotos;
+};
+
+gApp.previous = function(){
+	this.displayImage(this.currentGallery.getPrevious().full);
+};
+
+gApp.next = function(){
+	this.displayImage(this.currentGallery.getNext().full);
 };
 
 gApp.getUserGalleries = function(){
