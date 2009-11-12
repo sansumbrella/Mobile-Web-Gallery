@@ -1,0 +1,10 @@
+#thumbs li{
+	display:inline;
+	background:none;
+	border:none;
+}
+
+ul#thumbs{
+	border:none;
+	background:none;
+}
