@@ -23,7 +23,7 @@
 
 #thumbs .count{
 	clear:left;
-	width:320px;
+	width:auto;
 	text-align:center;
 	line-height:24px;
 	margin:0px;
@@ -32,4 +32,18 @@
 #thumbs{
 	padding:2px 0;
 	background:#FFF;
+}
+
+/*About Section*/
+.copy{
+	margin:0 10px;
+}
+p{
+	margin:5px 0;
+}
+
+/**/
+#heroImage{
+	display:block;
+	margin:0 auto;
 }
