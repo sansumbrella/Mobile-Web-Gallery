@@ -235,7 +235,7 @@
         }
         function goTo(toPage, animation) {
             var fromPage = hist[0].page;
-            
+            if(fromPage===toPage){return;}
             if (typeof(toPage) === 'string') {
                 toPage = $(toPage);
             }

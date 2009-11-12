@@ -1,4 +1,4 @@
-var gApp = {currentGallery:''};
+var gApp = {currentGallery:'', zoomed:false};
 gApp.jqt = $.jQTouch({
     icon: 'kilo.png',
     statusBar: 'black',
@@ -77,8 +77,15 @@ gApp.displayImage = function(im){
 	$('#heroimage').attr('src',im);
 	$('#heroimage').attr('src',im);
 	gApp.currentGallery.setCurrentFromURL(im);
-	console.log("Sliding to image " + im);
-	gApp.jqt.goTo('#singleImage', 'slide');
+	console.log("transitioning to image " + im);
+	if(!gApp.zoomed){
+		gApp.jqt.goTo('#singleImage', 'slide');
+		$('#singleImage').bind('pageAnimationEnd', function(){
+															gApp.zoomed=true;
+															$('#singleImage').unbind();
+															$('#singleImage').bind('pageAnimationEnd', function(){gApp.zoomed=false;});
+															});
+	}
 };
 
 gApp.buildInitialGallery = function(){
@@ -87,9 +94,9 @@ gApp.buildInitialGallery = function(){
 	var i=1;
 	for(i; i<18; i++)
 	{
-		gApp.allPhotos.photos[i] = {full:'images/'+i+'.jpg',
+		gApp.allPhotos.photos[i-1] = {full:'images/'+i+'.jpg',
 									thumb:'images/t/'+i+'.jpg',
-									desc:i.toString()
+									desc:String(i)
 									};
 	}
 };
