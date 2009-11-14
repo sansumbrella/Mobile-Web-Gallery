@@ -16,7 +16,7 @@ $(document).ready( function(){
 	$('#showuser').bind('click', function(e){e.preventDefault(); setGallery(userGallery);});
 	$('#previous').bind('click', function(e){e.preventDefault(); previous(); } );
 	$('#next').bind('click', function(e){e.preventDefault(); next(); });
-	$('#add_image').bind('click', function(e){e.preventDefault(); toggleMembership(currentGallery.getCurrent()); }); //push in the image that we're looking at
+	$('#toggle_membership').bind('click', function(e){e.preventDefault(); toggleMembership(currentGallery.getCurrent()); }); //push in the image that we're looking at
 });
 
 setGallery = function(g){
@@ -29,7 +29,7 @@ setGallery = function(g){
 displayMosaic = function(){
 	//change the add/remove text
 	var cta_txt = (currentGallery===allPhotos) ? "Add to collection" : "Remove";
-	$('#add_image').text(cta_txt);
+	$('#toggle_membership').text(cta_txt);
 	var thumbs='<ul>\n';
 	for(var p in currentGallery.photos){
 		thumbs += "<li><a href='"+currentGallery.photos[p].full+"'><img src='"+currentGallery.photos[p].thumb+"' alt='"+currentGallery.photos[p].desc+"'/></a></li>\n";
