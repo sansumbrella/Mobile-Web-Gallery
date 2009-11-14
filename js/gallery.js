@@ -104,10 +104,6 @@ getUserGalleries = function(){
             );
         }
     );
-
-	var currentDate = sessionStorage.currentDate;
-	    $('#date h1').text(currentDate);
-	    $('#date ul li:gt(0)').remove();
 	    db.transaction(
 	        function(transaction) {
 	            transaction.executeSql(
