@@ -2,3 +2,13 @@ Webkit Gallery created by David Wicks, http://sansumbrella.com/
 Sample HTML5 and Webkit application created for the UCLA MobileMedia series by David Wicks. You are free to use all of my code without restriction.
 
 This photo gallery uses both http://jqtouch.com/ and http://jquery.com/ You should check their licenses and support both projects.
+
+To do:
+add remove button to user gallery
+add multiple gallery support
+	button for new gallery
+	gallery table
+	gallery_photo
+		photo_id gallery_id
+		
+Prep 

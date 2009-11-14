@@ -16,7 +16,7 @@ $(document).ready( function(){
 	$('#showuser').bind('click', function(e){e.preventDefault(); setGallery(userGallery);});
 	$('#previous').bind('click', function(e){e.preventDefault(); previous(); } );
 	$('#next').bind('click', function(e){e.preventDefault(); next(); });
-	$('#add_image').bind('click', function(e){e.preventDefault(); addToGallery(currentGallery.getCurrent()); }); //push in the image that we're looking at
+	$('#add_image').bind('click', function(e){e.preventDefault(); toggleMembership(currentGallery.getCurrent()); }); //push in the image that we're looking at
 });
 
 setGallery = function(g){
@@ -115,8 +115,7 @@ getUserGalleries = function(){
 	                function (transaction, result) {
 	                    for (var i=0; i < result.rows.length; i++) {
 							var row = result.rows.item(i);
-							userGallery.photos.push({full:row.full_url, thumb:row.thumb_url, desc:row.desc});
-							
+							userGallery.photos.push({full:row.full_url, thumb:row.thumb_url, desc:row.desc, id:row.id});
 							console.log("returned from db: " + row.full_url);
 	                    }
 	                }, 
@@ -126,8 +125,17 @@ getUserGalleries = function(){
 	    );
 };
 
+toggleMembership = function(p){
+	if(currentGallery === allPhotos)
+	{
+		addToGallery(p);
+	} else
+	{
+		removeFromGallery(p);
+	}
+}
+
 addToGallery = function(p){
-	// var p = currentGallery.getImageFromURL(imgURL);
 	db.transaction(
 		function(transaction) {
 			transaction.executeSql(
@@ -140,7 +148,22 @@ addToGallery = function(p){
 			);}
 	    );
 	userGallery.photos.push(p);
-		return false;
+	return false;
+}
+
+removeFromGallery = function(p){
+	db.transaction(
+	        function(transaction) {
+	            transaction.executeSql('DELETE FROM photos WHERE id=?;', 
+	              [p.id], null, errorHandler);
+	        }
+	    );
+	for(var i=0; i<userGallery.photos.length; i++){
+		if(userGallery.photos[i]===p){
+			userGallery.photos.splice(i,1);
+		}
+	}
+	return false;
 }
 
 updateGallery = function(){
