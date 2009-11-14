@@ -1,4 +1,5 @@
 var currentGallery='';
+var db;
 var zoomed = false;
 jqt = $.jQTouch({
     icon: 'kilo.png',
@@ -15,6 +16,7 @@ $(document).ready( function(){
 	$('#showuser').bind('click', function(e){e.preventDefault(); setGallery(userGallery);});
 	$('#previous').bind('click', function(e){e.preventDefault(); previous(); } );
 	$('#next').bind('click', function(e){e.preventDefault(); next(); });
+	$('#add_image').bind('click', function(e){e.preventDefault(); addToGallery(currentGallery.getCurrent()); }); //push in the image that we're looking at
 });
 
 setGallery = function(g){
@@ -84,22 +86,68 @@ next = function(){
 getUserGalleries = function(){
 	userGallery = Object.create(Gallery);
 	userGallery.title = "User Gallery";
-	userGallery.photos = [
-		{full:'images/1.jpg',
-		thumb:'images/t/1.jpg',
-		desc:'Photo 1'},
-		{full:'images/4.jpg',
-		thumb:'images/t/4.jpg',
-		desc:'Photo 2'},
-		{full:'images/2.jpg',
-		thumb:'images/t/2.jpg',
-		desc:'Photo 3'},
-		{full:'images/5.jpg',
-		thumb:'images/t/5.jpg',
-		desc:'Photo 4'}
-	]
+	userGallery.photos = [];
+	
+	var shortName = 'gallery';
+	var version = '1.0';
+	var displayName = 'Mobile photo gallery';
+	var maxSize = 65536;
+	db = openDatabase(shortName, version, displayName, maxSize);
+    db.transaction(
+        function(transaction) {
+            transaction.executeSql(
+                'CREATE TABLE IF NOT EXISTS photos (' +
+                ' id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ' +
+                ' full_url TEXT NOT NULL, thumb_url TEXT NOT NULL, ' +
+                ' desc TEXT NOT NULL );'
+            );
+        }
+    );
+
+	var currentDate = sessionStorage.currentDate;
+	    $('#date h1').text(currentDate);
+	    $('#date ul li:gt(0)').remove();
+	    db.transaction(
+	        function(transaction) {
+	            transaction.executeSql(
+	                'SELECT * FROM photos;',
+	                [], 
+	                function (transaction, result) {
+	                    for (var i=0; i < result.rows.length; i++) {
+							var row = result.rows.item(i);
+							userGallery.photos.push({full:row.full_url, thumb:row.thumb_url, desc:row.desc});
+							
+							console.log("returned from db: " + row.full_url);
+	                    }
+	                }, 
+	                errorHandler
+	            );
+	        }
+	    );
 };
+
+addToGallery = function(p){
+	// var p = currentGallery.getImageFromURL(imgURL);
+	db.transaction(
+		function(transaction) {
+			transaction.executeSql(
+				'INSERT INTO photos (full_url, thumb_url, desc) VALUES (?, ?, ?);', 
+				[p.full,p.thumb,p.desc], 
+				function(){
+					// jQT.goBack();
+				}, 
+				errorHandler
+			);}
+	    );
+	userGallery.photos.push(p);
+		return false;
+}
 
 updateGallery = function(){
 	
+};
+
+errorHandler = function(transaction,err){
+	console.log("encountered a database error: " + err.message );
+	return true;
 };

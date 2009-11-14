@@ -38,5 +38,14 @@ Gallery = {
 				return;
 			}
 		}
+	},
+	getImageFromURL: function(url){
+		for(i in this.photos)
+		{
+			if(this.photos[i].full.match(url)){
+				console.log("Current set to " + i + ", " + url);
+				return this.photos[i];
+			}
+		}
 	}
 };
