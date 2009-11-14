@@ -27,15 +27,17 @@ setGallery = function(g){
 }
 
 displayMosaic = function(){
-	var m = currentGallery;
+	//change the add/remove text
+	var cta_txt = (currentGallery===allPhotos) ? "Add to collection" : "Remove";
+	$('#add_image').text(cta_txt);
 	var thumbs='<ul>\n';
-	for(var p in m.photos){
-		thumbs += "<li><a href='"+m.photos[p].full+"'><img src='"+m.photos[p].thumb+"' alt='"+m.photos[p].desc+"'/></a></li>\n";
+	for(var p in currentGallery.photos){
+		thumbs += "<li><a href='"+currentGallery.photos[p].full+"'><img src='"+currentGallery.photos[p].thumb+"' alt='"+currentGallery.photos[p].desc+"'/></a></li>\n";
 	}
 	thumbs+="</ul>\n";
-	thumbs+="<h2 class='count'>"+m.photos.length+" Photos</h2>";
+	thumbs+="<h2 class='count'>"+currentGallery.photos.length+" Photos</h2>";
 	
-	$('#mosaic .toolbar h1').text(m.title);
+	$('#mosaic .toolbar h1').text(currentGallery.title);
 	$('#thumbs').html(thumbs);
 	//change link behavior
 	$('#thumbs a').each( function(){
@@ -48,7 +50,6 @@ displayMosaic = function(){
 };
 
 displayImage = function(im){
-	$('#heroimage').attr('src',im);
 	$('#heroimage').attr('src',im);
 	currentGallery.setCurrentFromURL(im);
 	console.log("transitioning to image " + im);
@@ -132,6 +133,7 @@ toggleMembership = function(p){
 	} else
 	{
 		removeFromGallery(p);
+		jqt.goBack();
 	}
 }
 
