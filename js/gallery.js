@@ -1,4 +1,5 @@
-var currentGallery='';
+var currentGallery;
+var allPhotos;
 var db;
 var zoomed = false;
 jqt = $.jQTouch({
@@ -16,7 +17,7 @@ $(document).ready( function(){
 	$('#showuser').bind('click', function(e){e.preventDefault(); setGallery(userGallery);});
 	$('#previous').bind('click', function(e){e.preventDefault(); previous(); } );
 	$('#next').bind('click', function(e){e.preventDefault(); next(); });
-	$('#toggle_membership').bind('click', function(e){e.preventDefault(); toggleMembership(currentGallery.getCurrent()); }); //push in the image that we're looking at
+	$('#toggle_membership').bind('click', function(e){e.preventDefault(); toggleMembership(currentGallery.getCurrent()); });
 });
 
 setGallery = function(g){
@@ -24,12 +25,16 @@ setGallery = function(g){
 		g = allPhotos;
 	}
 	currentGallery = g;
+	//change the add/remove text
+	if(currentGallery===allPhotos)
+	{
+		$('#toggle_membership').text("Add to collection");
+	} else {
+		$('#toggle_membership').text("Remove");
+	}
 }
 
 displayMosaic = function(){
-	//change the add/remove text
-	var cta_txt = (currentGallery===allPhotos) ? "Add to collection" : "Remove";
-	$('#toggle_membership').text(cta_txt);
 	var thumbs='<ul>\n';
 	for(var p in currentGallery.photos){
 		thumbs += "<li><a href='"+currentGallery.photos[p].full+"'><img src='"+currentGallery.photos[p].thumb+"' alt='"+currentGallery.photos[p].desc+"'/></a></li>\n";
@@ -140,7 +145,7 @@ addToGallery = function(p){
 				'INSERT INTO photos (full_url, thumb_url, desc) VALUES (?, ?, ?);', 
 				[p.full,p.thumb,p.desc], 
 				function(){
-					// jQT.goBack();
+					jqt.goBack();
 				}, 
 				errorHandler
 			);}
