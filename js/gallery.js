@@ -17,6 +17,10 @@ $(document).ready( function(){
 	$('#showuser').bind('click', function(e){e.preventDefault(); setGallery(userGallery);});
 	$('#previous').bind('click', function(e){e.preventDefault(); previous(); } );
 	$('#next').bind('click', function(e){e.preventDefault(); next(); });
+	
+	
+	
+	
 	$('#toggle_membership').bind('click', function(e){e.preventDefault(); toggleMembership(currentGallery.getCurrent()); });
 });
 
